@@ -1,0 +1,52 @@
+plugins {
+    id 'java'
+    id 'net.serenity-bdd.serenity-gradle-plugin' version '4.3.2'
+}
+
+group = 'co.com.reto'
+version = '1.0'
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
+}
+
+repositories {
+    mavenCentral()
+}
+
+ext {
+    serenityVersion = '4.3.2'
+    cucumberVersion = '7.31.0'
+}
+
+dependencies {
+    // Serenity BDD + patron Screenplay
+    testImplementation "net.serenity-bdd:serenity-core:${serenityVersion}"
+    testImplementation "net.serenity-bdd:serenity-cucumber:${serenityVersion}"
+    testImplementation "net.serenity-bdd:serenity-screenplay:${serenityVersion}"
+    testImplementation "net.serenity-bdd:serenity-screenplay-webdriver:${serenityVersion}"
+
+    // Cucumber sobre JUnit 5
+    testImplementation "io.cucumber:cucumber-java:${cucumberVersion}"
+    testImplementation "io.cucumber:cucumber-junit-platform-engine:${cucumberVersion}"
+    testImplementation platform('org.junit:junit-bom:5.14.0')
+    testImplementation 'org.junit.platform:junit-platform-suite'
+    testImplementation 'org.junit.jupiter:junit-jupiter-engine'
+
+    // Lectura del contenido del PDF
+    testImplementation 'org.apache.pdfbox:pdfbox:3.0.2'
+
+    // Comparaciones legibles en las validaciones
+    testImplementation 'org.hamcrest:hamcrest:2.2'
+}
+
+test {
+    useJUnitPlatform()
+    testLogging.showStandardStreams = true
+    systemProperties System.getProperties()
+}
+
+// Siempre genera el reporte de Serenity, aunque alguna prueba falle
+gradle.startParameter.continueOnFailure = true
+test.finalizedBy(aggregate)
