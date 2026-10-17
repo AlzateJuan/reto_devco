@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Certificados</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 420px; margin: 40px auto; }
+        label, input, button { display: block; width: 100%; margin-bottom: 10px; }
+        input, button { padding: 8px; box-sizing: border-box; }
+        #descargar { display: none; }
+    </style>
+</head>
+<body>
+<h1>Generar certificado</h1>
+
+<label for="nombre">Nombre</label>
+<input id="nombre" type="text">
+
+<label for="documento">Documento</label>
+<input id="documento" type="text">
+
+<button id="generar">Generar certificado</button>
+<a id="descargar" download="certificado.pdf">Descargar PDF</a>
+
+<script>
+    document.getElementById('generar').addEventListener('click', function () {
+        var nombre = document.getElementById('nombre').value;
+        var documento = document.getElementById('documento').value;
+
+        var pdf = new window.jspdf.jsPDF();
+        pdf.text('CERTIFICADO BANCARIO', 20, 20);
+        pdf.text('Nombre: ' + nombre, 20, 40);
+        pdf.text('Documento: ' + documento, 20, 50);
+
+        var enlace = document.getElementById('descargar');
+        enlace.href = pdf.output('datauristring');
+        enlace.style.display = 'block';
+    });
+</script>
+</body>
+</html>
